@@ -1,0 +1,29 @@
+# virtual python env
+ENV
+
+# Byte-compiled / optimized / DLL files
+
+.idea
+src/conf/__pycache__/
+src/.DS_Store
+*.py[cod]
+*$py.class
+
+#py.test
+.cache/
+
+#unittest
+ExampleReport.html
+
+#log
+*.log
+nohup.out
+output
+
+
+# python get dto relationship scripts
+# src/conf/get_all_dto_conf.py
+
+# coverage
+.coverage
+htmlcov/
