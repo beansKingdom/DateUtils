@@ -27,3 +27,8 @@ output
 # coverage
 .coverage
 htmlcov/
+
+# pypi包
+build
+*.egg-info
+dist
