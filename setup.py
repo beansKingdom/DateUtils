@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="BeanDateUtils",
-    version="0.1",
+    version="0.2",
     author="Hly",
     author_email="hlyaction@gmail.com",
     description="A Python library for date compute.",
