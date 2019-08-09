@@ -11,6 +11,7 @@ def compute_interval_days(interval_days, input_time=None):
         now-time: 2019-08-06
         compute_interval_days(-3) ==> 2019-08-03
         compute_interval_days(3) ==> 2019-08-09
+        compute_interval_days(3, datetime.datetime(2019, 8, 3)) ==> 2019-07-31
     """
 
     if not input_time:
@@ -19,7 +20,7 @@ def compute_interval_days(interval_days, input_time=None):
         if isinstance(input_time, datetime.date):
             pass
         else:
-            raise Exception("传入时间类型错误, 应该为 datetime.date()")
+            raise Exception("传入时间类型错误, 应该为 datetime.datetime(y, m, d)")
 
     output_time = input_time + datetime.timedelta(days=int(interval_days))
     return output_time
@@ -34,13 +35,11 @@ def compute_time_stamp():
     return now_time_stamp
 
 
-"""
-返回当前时间之间某个时间段的毫秒时间戳
-@:param: interval_time: 间隔时间（秒）
-"""
-
-
 def compute_time_delta(interval_time=0):
+    """
+    返回当前时间之间某个时间段的毫秒时间戳
+    @:param: interval_time: 间隔时间（秒）
+    """
     now_time = datetime.datetime.now()
     past_time = now_time - datetime.timedelta(seconds=interval_time)
     t_time = time.mktime(past_time.timetuple()) + past_time.microsecond / 1E6
@@ -67,19 +66,43 @@ def compute_time(interval=0):
     return day_str
 
 
-def compute_last_week_time():
+def compute_last_week_time(input_time=None):
     """
-    根据当天的时间查询上周的开始时间和结束时间 (返回时间为上上周6到上周6的日期)
-    返回格式: yyyy-mm-dd, yyyy-mm-dd
+    :param input_time: 指定计算的时间
     :return start_time, end_time
+    根据指定时间查询指定时间上周的开始时间和结束时间 (返回时间为上上周6到上周6的日期)
+    返回格式: yyyy-mm-dd, yyyy-mm-dd
     """
-    now_time = datetime.datetime.now()
+    if not input_time:
+        input_time = datetime.datetime.now()
+    else:
+        input_time = change_str_to_datetime(input_time, str_format="%Y-%m-%d")
     day_format = "%Y-%m-%d"
-    end_time = now_time - datetime.timedelta(days=(now_time.weekday() + 3))
+    end_time = input_time - datetime.timedelta(days=(input_time.weekday() + 3))
     start_time = end_time - datetime.timedelta(days=6)
     start_time_str = start_time.strftime(day_format)
     end_time_str = end_time.strftime(day_format)
     return start_time_str, end_time_str
+
+
+def change_str_to_datetime(input_time=None, str_format="%Y-%m-%d"):
+    """
+    :param input_time: 指定需要转换的时间, 默认当前时间 "2019-08-09"
+    :param str_format: 字符时间的格式, 默认%Y-%m-%d
+    :return:
+    """
+    spec_time = input_time or change_datetime_to_str(str_format=str_format)
+    return datetime.datetime.strptime(spec_time, str_format)
+
+
+def change_datetime_to_str(input_time=None, str_format="%Y-%m-%d"):
+    """
+    :param input_time: 指定需要转换的时间, 默认当前时间
+    :param str_format: 字符时间的格式, 默认%Y-%m-%d
+    :return:
+    """
+    spec_time = input_time or datetime.datetime.now()
+    return spec_time.strftime(str_format)
 
 
 def compute_interval_day(input_time):
@@ -109,13 +132,16 @@ def compute_timestamp(time_str, time_format):
 
 
 if __name__ == '__main__':
-    print(compute_interval_days(-3))
+    # print(compute_interval_days(-3))
+    # print(compute_interval_days(-3, datetime.datetime(2019, 8, 3, 15, 0, 0)))
     # a.compute_interval_days(-3)
     # print(DateComputeUtil.compute_time_stamp())
     # print(DateComputeUtil.compute_time_delta(60))
     # print(DateComputeUtil.compute_time_delta(0))
     # print(DateComputeUtil.compute_time())
-    # print(DateUtils.compute_last_week_time())
+    print(compute_last_week_time(input_time="2019-08-01"))
     # print(DateComputeUtil.compute_interval_day(datetime.datetime(2019,7,1,10,30,30)))
     # print()
+    # print(change_datetime_to_str())
+    # print(change_str_to_datetime())
     pass
