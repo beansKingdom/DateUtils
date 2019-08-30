@@ -70,7 +70,7 @@ def compute_last_week_time(input_time=None):
     """
     :param input_time: 指定计算的时间
     :return start_time, end_time
-    根据指定时间查询指定时间上周的开始时间和结束时间 (返回时间为上上周6到上周6的日期)
+    根据指定时间查询指定时间上周的开始时间和结束时间 (返回时间为上上周6到上周5的日期)
     返回格式: yyyy-mm-dd, yyyy-mm-dd
     """
     if not input_time:
@@ -79,6 +79,26 @@ def compute_last_week_time(input_time=None):
         input_time = change_str_to_datetime(input_time, str_format="%Y-%m-%d")
     day_format = "%Y-%m-%d"
     end_time = input_time - datetime.timedelta(days=(input_time.weekday() + 3))
+    start_time = end_time - datetime.timedelta(days=6)
+    start_time_str = start_time.strftime(day_format)
+    end_time_str = end_time.strftime(day_format)
+    return start_time_str, end_time_str
+
+
+def compute_week_time(input_time=None):
+    """
+    :param input_time: 指定计算的时间
+    :return start_time, end_time
+    根据指定时间查询指定时间 本周的开始时间和结束时间 (返回时间为上周6到本周5的日期)
+    返回格式: yyyy-mm-dd, yyyy-mm-dd
+    """
+    if not input_time:
+        input_time = datetime.datetime.now()
+    else:
+        input_time = change_str_to_datetime(input_time, str_format="%Y-%m-%d")
+    day_format = "%Y-%m-%d"
+    interval_time = 4 - input_time.weekday()
+    end_time = input_time + datetime.timedelta(days=interval_time)
     start_time = end_time - datetime.timedelta(days=6)
     start_time_str = start_time.strftime(day_format)
     end_time_str = end_time.strftime(day_format)
@@ -139,7 +159,8 @@ if __name__ == '__main__':
     # print(DateComputeUtil.compute_time_delta(60))
     # print(DateComputeUtil.compute_time_delta(0))
     # print(DateComputeUtil.compute_time())
-    print(compute_last_week_time(input_time="2019-08-01"))
+    print(compute_last_week_time())
+    print(compute_week_time())
     # print(DateComputeUtil.compute_interval_day(datetime.datetime(2019,7,1,10,30,30)))
     # print()
     # print(change_datetime_to_str())
