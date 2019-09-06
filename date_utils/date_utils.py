@@ -46,10 +46,13 @@ def compute_time_delta(interval_time=0):
     return int(round(t_time * 1000))
 
 
-def compute_time(interval=0):
+def compute_time(interval=0, time_format="%Y-%m-%d"):
     """
-    返回当前时间的年月日格式: yyyy-mm-dd
-    interval: 与当前时间的间隔日期
+    :param
+        interval: 与当前时间的间隔日期
+        time_format: 返回结果时间的字符串格式
+    :return
+        返回当前时间的年月日格式: yyyy-mm-dd
     example: interval = 1表示一天后的时间, -1表示前一天的时间
     """
 
@@ -61,14 +64,15 @@ def compute_time(interval=0):
         real_time = now_time + datetime.timedelta(days=interval)
     else:
         real_time = now_time - datetime.timedelta(days=-interval)
-    day_format = "%Y-%m-%d"
-    day_str = real_time.strftime(day_format)
+    day_str = real_time.strftime(time_format)
     return day_str
 
 
-def compute_last_week_time(input_time=None):
+def compute_last_week_time(input_time=None, time_format="%Y-%m-%d"):
     """
-    :param input_time: 指定计算的时间
+    :param
+        input_time: 指定计算的时间
+        time_format: 指定计算时间的字符串格式
     :return start_time, end_time
     根据指定时间查询指定时间上周的开始时间和结束时间 (返回时间为上上周6到上周5的日期)
     返回格式: yyyy-mm-dd, yyyy-mm-dd
@@ -76,18 +80,19 @@ def compute_last_week_time(input_time=None):
     if not input_time:
         input_time = datetime.datetime.now()
     else:
-        input_time = change_str_to_datetime(input_time, str_format="%Y-%m-%d")
-    day_format = "%Y-%m-%d"
+        input_time = change_str_to_datetime(input_time, str_format=time_format)
     end_time = input_time - datetime.timedelta(days=(input_time.weekday() + 3))
     start_time = end_time - datetime.timedelta(days=6)
-    start_time_str = start_time.strftime(day_format)
-    end_time_str = end_time.strftime(day_format)
+    start_time_str = start_time.strftime(time_format)
+    end_time_str = end_time.strftime(time_format)
     return start_time_str, end_time_str
 
 
-def compute_week_time(input_time=None):
+def compute_week_time(input_time=None, time_format="%Y-%m-%d"):
     """
-    :param input_time: 指定计算的时间
+    :param
+        input_time: 指定计算的时间
+        time_format: 指定计算时间的字符串格式
     :return start_time, end_time
     根据指定时间查询指定时间 本周的开始时间和结束时间 (返回时间为上周6到本周5的日期)
     返回格式: yyyy-mm-dd, yyyy-mm-dd
@@ -95,14 +100,33 @@ def compute_week_time(input_time=None):
     if not input_time:
         input_time = datetime.datetime.now()
     else:
-        input_time = change_str_to_datetime(input_time, str_format="%Y-%m-%d")
-    day_format = "%Y-%m-%d"
+        input_time = change_str_to_datetime(input_time, str_format=time_format)
     interval_time = 4 - input_time.weekday()
     end_time = input_time + datetime.timedelta(days=interval_time)
     start_time = end_time - datetime.timedelta(days=6)
-    start_time_str = start_time.strftime(day_format)
-    end_time_str = end_time.strftime(day_format)
+    start_time_str = start_time.strftime(time_format)
+    end_time_str = end_time.strftime(time_format)
     return start_time_str, end_time_str
+
+
+def compute_next_week_first_day(input_time=None, time_format="%Y-%m-%d"):
+    """
+    :param
+        input_time: 指定计算的时间
+        time_format: 指定计算时间的字符串格式
+    :return day_time
+    根据指定时间计算指定时间下周的第一天
+    返回格式: yyyy-mm-dd
+    """
+    if not input_time:
+        input_time = datetime.datetime.now()
+    else:
+        input_time = change_str_to_datetime(input_time, str_format=time_format)
+    interval_time = 7 - input_time.weekday()
+    first_day_time = input_time + datetime.timedelta(days=interval_time)
+    first_day_time_str = first_day_time.strftime(time_format)
+
+    return first_day_time_str
 
 
 def change_str_to_datetime(input_time=None, str_format="%Y-%m-%d"):
@@ -159,10 +183,10 @@ if __name__ == '__main__':
     # print(DateComputeUtil.compute_time_delta(60))
     # print(DateComputeUtil.compute_time_delta(0))
     # print(DateComputeUtil.compute_time())
-    print(compute_last_week_time())
-    print(compute_week_time())
+    # print(compute_last_week_time())
+    # print(compute_week_time())
     # print(DateComputeUtil.compute_interval_day(datetime.datetime(2019,7,1,10,30,30)))
     # print()
     # print(change_datetime_to_str())
     # print(change_str_to_datetime())
-    pass
+    print(compute_next_week_first_day())
