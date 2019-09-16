@@ -1,7 +1,6 @@
 bleach==3.1.0
 certifi==2019.6.16
 chardet==3.0.4
-DateUtils==0.1
 docutils==0.15.2
 idna==2.8
 pkginfo==1.5.0.1
